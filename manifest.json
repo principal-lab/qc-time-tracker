@@ -1,0 +1,17 @@
+{
+  "name": "QC Billable Time Tracker",
+  "short_name": "QC Time",
+  "description": "Track billable time for QC Aviation engagements",
+  "start_url": "./time_tracker_pwa.html",
+  "display": "standalone",
+  "background_color": "#7e7858",
+  "theme_color": "#7e7858",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "QC_Letters_250212.ico",
+      "sizes": "48x48 32x32 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

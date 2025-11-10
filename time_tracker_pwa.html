@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#7e7858">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>QC Billable Time Tracker</title>
+    <link rel="manifest" href="./manifest.json">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+            background-color: #4a4a4a;
+        }
+
+        body.timing {
+            background-color: #90EE90;
+        }
+
+        body.stopped {
+            background-color: #000000;
+        }
+
+        .container {
+            background-color: #7e7858;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .logo {
+            display: block;
+            max-width: 200px;
+            width: 100%;
+            margin: 0 auto 20px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+            font-family: Arial, sans-serif;
+        }
+
+        .word-count {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .word-count.over-limit {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+            touch-action: manipulation;
+        }
+
+        button:active:not(:disabled) {
+            opacity: 0.6;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #startBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #stopBtn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        #exportBtn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        #viewDataBtn {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .status {
+            text-align: center;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .status.idle {
+            background-color: #f0f0f0;
+            color: #666;
+        }
+
+        .status.running {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .status.success {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .status.error {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .elapsed-time {
+            text-align: center;
+            font-size: 28px;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .data-summary {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #7e7858;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .install-prompt {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .install-prompt button {
+            background-color: white;
+            color: #4CAF50;
+            border: none;
+            padding: 8px 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.2em;
+            }
+
+            .elapsed-time {
+                font-size: 24px;
+            }
+
+            button {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="installPrompt" class="install-prompt">
+            <div>Install this app on your device for easy access!</div>
+            <button onclick="installApp()">Install App</button>
+        </div>
+
+        <img src="QC_Logo_Letterhead_241111.jpg" alt="QC Logo" class="logo">
+        <h1>QC Billable Time Tracker</h1>
+
+        <div class="data-summary" id="dataSummary">No entries yet</div>
+
+        <div class="form-group">
+            <label for="engagement">Engagement:</label>
+            <input type="text" id="engagement" placeholder="Enter engagement name">
+        </div>
+
+        <div class="form-group">
+            <label for="task">Task:</label>
+            <textarea id="task" placeholder="Enter task description (max 50 words)" oninput="updateWordCount()"></textarea>
+            <div class="word-count" id="wordCount">0 / 50 words</div>
+        </div>
+
+        <div class="elapsed-time" id="elapsedTime">00:00:00</div>
+
+        <div class="button-group">
+            <button id="startBtn" onclick="startTiming()">Timing Start</button>
+            <button id="stopBtn" onclick="stopTiming()" disabled>Timing Stop</button>
+        </div>
+
+        <div class="button-group">
+            <button id="viewDataBtn" onclick="showData()">View Data</button>
+            <button id="exportBtn" onclick="exportToCSV()">Export CSV</button>
+        </div>
+
+        <div class="status idle" id="status">Ready to start timing</div>
+    </div>
+
+    <!-- Modal for viewing data -->
+    <div id="dataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Time Entries</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="dataTableContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        let startTimestamp = null;
+        let timerInterval = null;
+        let deferredPrompt = null;
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        }
+
+        // Handle install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').style.display = 'block';
+        });
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('installPrompt').style.display = 'none';
+                });
+            }
+        }
+
+        // Initialize
+        updateDataSummary();
+
+        function getStoredData() {
+            const data = localStorage.getItem('qc_time_entries');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveEntry(entry) {
+            const entries = getStoredData();
+            entries.push(entry);
+            localStorage.setItem('qc_time_entries', JSON.stringify(entries));
+            updateDataSummary();
+        }
+
+        function updateDataSummary() {
+            const entries = getStoredData();
+            const totalHours = entries.reduce((sum, entry) => sum + entry.hours, 0);
+            const summaryEl = document.getElementById('dataSummary');
+
+            if (entries.length === 0) {
+                summaryEl.textContent = 'No entries yet';
+            } else {
+                summaryEl.textContent = `${entries.length} entries | Total: ${totalHours.toFixed(1)} hours`;
+            }
+        }
+
+        function updateWordCount() {
+            const task = document.getElementById('task').value.trim();
+            const words = task ? task.split(/\s+/).filter(word => word.length > 0) : [];
+            const wordCount = words.length;
+            const wordCountEl = document.getElementById('wordCount');
+
+            wordCountEl.textContent = `${wordCount} / 50 words`;
+
+            if (wordCount > 50) {
+                wordCountEl.classList.add('over-limit');
+            } else {
+                wordCountEl.classList.remove('over-limit');
+            }
+        }
+
+        function updateElapsedTime() {
+            if (startTimestamp) {
+                const now = new Date();
+                const elapsed = now - startTimestamp;
+                const hours = Math.floor(elapsed / 3600000);
+                const minutes = Math.floor((elapsed % 3600000) / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
+
+                document.getElementById('elapsedTime').textContent =
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+        }
+
+        function startTiming() {
+            const engagement = document.getElementById('engagement').value.trim();
+            const task = document.getElementById('task').value.trim();
+
+            if (!engagement) {
+                showStatus('Please enter an engagement name', 'error');
+                return;
+            }
+
+            // Validate word count
+            const words = task ? task.split(/\s+/).filter(word => word.length > 0) : [];
+            if (words.length > 50) {
+                showStatus('Task description must be 50 words or less', 'error');
+                return;
+            }
+
+            startTimestamp = new Date();
+            document.body.className = 'timing';
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            document.getElementById('engagement').disabled = true;
+            document.getElementById('task').disabled = true;
+
+            timerInterval = setInterval(updateElapsedTime, 1000);
+            updateElapsedTime();
+
+            showStatus('Timing in progress...', 'running');
+        }
+
+        function stopTiming() {
+            const stopTimestamp = new Date();
+            const engagement = document.getElementById('engagement').value.trim();
+            const task = document.getElementById('task').value.trim();
+
+            clearInterval(timerInterval);
+
+            // Calculate time difference in hours with decimals
+            const timeDiffMs = stopTimestamp - startTimestamp;
+            const timeDiffHours = timeDiffMs / (1000 * 60 * 60);
+
+            // Round up to next decimal (0.1 hour)
+            const roundedHours = Math.ceil(timeDiffHours * 10) / 10;
+
+            // Format date as MM/DD/YYYY
+            const date = `${String(stopTimestamp.getMonth() + 1).padStart(2, '0')}/${String(stopTimestamp.getDate()).padStart(2, '0')}/${stopTimestamp.getFullYear()}`;
+
+            document.body.className = 'stopped';
+
+            showStatus('Saving entry...', 'running');
+
+            try {
+                // Save to localStorage
+                saveEntry({
+                    date: date,
+                    engagement: engagement,
+                    hours: roundedHours,
+                    task: task,
+                    timestamp: stopTimestamp.toISOString()
+                });
+
+                showStatus(`Saved! ${roundedHours.toFixed(1)} hours logged for ${engagement}`, 'success');
+            } catch (error) {
+                showStatus(`Error: ${error.message}`, 'error');
+            }
+
+            // Reset after a delay
+            setTimeout(reset, 3000);
+        }
+
+        function reset() {
+            startTimestamp = null;
+            document.body.className = '';
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('engagement').disabled = false;
+            document.getElementById('engagement').value = '';
+            document.getElementById('task').disabled = false;
+            document.getElementById('task').value = '';
+            document.getElementById('elapsedTime').textContent = '00:00:00';
+            updateWordCount();
+            showStatus('Ready to start timing', 'idle');
+        }
+
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+
+        function showData() {
+            const entries = getStoredData();
+            const modal = document.getElementById('dataModal');
+            const container = document.getElementById('dataTableContainer');
+
+            if (entries.length === 0) {
+                container.innerHTML = '<p>No time entries yet.</p>';
+            } else {
+                let tableHTML = '<table class="data-table"><thead><tr><th>Date</th><th>Engagement</th><th>Hours</th><th>Task</th></tr></thead><tbody>';
+
+                // Show most recent first
+                entries.slice().reverse().forEach(entry => {
+                    tableHTML += `<tr>
+                        <td>${entry.date}</td>
+                        <td>${entry.engagement}</td>
+                        <td>${entry.hours.toFixed(1)}</td>
+                        <td>${entry.task || '-'}</td>
+                    </tr>`;
+                });
+
+                tableHTML += '</tbody></table>';
+                container.innerHTML = tableHTML;
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('dataModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('dataModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function exportToCSV() {
+            const entries = getStoredData();
+
+            if (entries.length === 0) {
+                showStatus('No data to export', 'error');
+                setTimeout(() => showStatus('Ready to start timing', 'idle'), 2000);
+                return;
+            }
+
+            // Create CSV content
+            let csvContent = 'Date,Engagement,Hours,Task\n';
+
+            entries.forEach(entry => {
+                const task = (entry.task || '').replace(/"/g, '""'); // Escape quotes
+                csvContent += `"${entry.date}","${entry.engagement}",${entry.hours},"${task}"\n`;
+            });
+
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            const now = new Date();
+            const filename = `QC_Time_Tracker_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.csv`;
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showStatus(`Exported ${entries.length} entries to ${filename}`, 'success');
+            setTimeout(() => showStatus('Ready to start timing', 'idle'), 3000);
+        }
+    </script>
+</body>
+</html>
