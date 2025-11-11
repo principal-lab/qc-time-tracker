@@ -1,0 +1,65 @@
+DEPLOY QC TIME TRACKER TO NETLIFY DROP
+=======================================
+
+This is the FASTEST way - just drag and drop!
+Takes less than 2 minutes and it's FREE forever.
+
+STEP 1: Go to Netlify Drop
+---------------------------
+1. On your laptop, open browser and go to:
+   https://app.netlify.com/drop
+
+2. No account needed to start!
+
+STEP 2: Prepare Your Files
+---------------------------
+1. Open File Explorer
+2. Go to: C:\Users\nevho\code\Time_Tracker
+3. Select these 5 files (hold Ctrl and click each):
+   ✓ time_tracker_pwa.html
+   ✓ manifest.json
+   ✓ service-worker.js
+   ✓ QC_Logo_Letterhead_241111.jpg
+   ✓ QC_Letters_250212.ico
+
+STEP 3: Deploy
+--------------
+1. Drag the 5 selected files onto the Netlify Drop page
+2. Wait 10-30 seconds for upload
+3. Netlify will give you a URL like:
+   https://random-name-12345.netlify.app
+
+4. Copy this URL!
+
+STEP 4: Rename Your Site (Optional)
+------------------------------------
+1. Click "Sign up" or "Log in" on Netlify (free account)
+2. Go to "Site settings" → "Change site name"
+3. Change to something like: qc-time-tracker
+4. Your new URL: https://qc-time-tracker.netlify.app
+
+STEP 5: Install on Android
+---------------------------
+1. Open Chrome on your Android phone
+2. Go to your Netlify URL
+3. Add /time_tracker_pwa.html at the end
+   Example: https://qc-time-tracker.netlify.app/time_tracker_pwa.html
+4. Tap menu (⋮) → "Install app"
+5. Done!
+
+BENEFITS:
+---------
+✓ Easiest method - just drag & drop
+✓ No technical knowledge needed
+✓ Free forever
+✓ HTTPS enabled automatically
+✓ Works immediately
+✓ Can update by dragging new files
+
+UPDATING THE APP:
+-----------------
+1. Go to your Netlify site dashboard
+2. Click "Deploys" tab
+3. Drag your updated files to the drop zone
+4. Done! Changes are live in seconds
+

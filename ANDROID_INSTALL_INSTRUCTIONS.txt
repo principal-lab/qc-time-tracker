@@ -1,0 +1,164 @@
+QC TIME TRACKER - ANDROID PWA INSTALLATION INSTRUCTIONS
+=========================================================
+
+This is a Progressive Web App (PWA) version that works on Android without needing a server!
+
+WHAT YOU NEED:
+--------------
+1. A web server to host the files (see options below)
+2. An Android phone with Chrome, Edge, or Samsung Internet browser
+3. Wi-Fi connection between your laptop and phone (for testing)
+
+INSTALLATION OPTIONS:
+--------------------
+
+OPTION 1: Simple Python Web Server (Recommended for Testing)
+------------------------------------------------------------
+1. Make sure Python is installed on your laptop
+   - Open Command Prompt and type: python --version
+   - If not installed, download from python.org
+
+2. Navigate to the Time_Tracker folder in Command Prompt:
+   cd C:\Users\nevho\code\Time_Tracker
+
+3. Start a simple web server:
+   python -m http.server 8080
+
+4. Find your laptop's IP address:
+   - Open Command Prompt
+   - Type: ipconfig
+   - Look for "IPv4 Address" (usually starts with 192.168.x.x)
+
+5. On your Android phone:
+   - Connect to the same Wi-Fi network as your laptop
+   - Open Chrome browser
+   - Go to: http://YOUR-LAPTOP-IP:8080/time_tracker_pwa.html
+     (Replace YOUR-LAPTOP-IP with the IP from step 4)
+     Example: http://192.168.1.100:8080/time_tracker_pwa.html
+
+6. Install the app on your phone:
+   - Tap the menu (three dots) in Chrome
+   - Select "Install app" or "Add to Home Screen"
+   - The app will appear on your home screen like a native app!
+
+
+OPTION 2: Node.js Web Server (If you have Node.js installed)
+------------------------------------------------------------
+1. Navigate to Time_Tracker folder in Command Prompt:
+   cd C:\Users\nevho\code\Time_Tracker
+
+2. Start the existing server:
+   node time_tracker_server.js
+
+3. Find your laptop's IP address (use ipconfig as shown above)
+
+4. On your Android phone:
+   - Go to: http://YOUR-LAPTOP-IP:3000/time_tracker_pwa.html
+
+
+OPTION 3: Upload to Web Hosting (For Permanent Access)
+------------------------------------------------------
+1. Upload these files to any web hosting service:
+   - time_tracker_pwa.html
+   - manifest.json
+   - service-worker.js
+   - QC_Logo_Letterhead_241111.jpg
+   - QC_Letters_250212.ico
+
+2. Visit the URL on your Android phone and install
+
+Popular free hosting options:
+- GitHub Pages (github.com)
+- Netlify (netlify.com)
+- Vercel (vercel.com)
+
+
+USING THE APP:
+--------------
+Once installed on Android:
+
+1. TRACK TIME:
+   - Open the app from your home screen
+   - Enter engagement name
+   - Enter task description (optional, max 50 words)
+   - Tap "Timing Start"
+   - Tap "Timing Stop" when done
+   - Time is automatically rounded up to 0.1 hours
+
+2. VIEW YOUR DATA:
+   - Tap "View Data" to see all entries
+   - Shows date, engagement, hours, and task for each entry
+
+3. EXPORT DATA:
+   - Tap "Export CSV" to download all entries
+   - The CSV file will be saved to your phone's Downloads folder
+   - You can open it in Excel or import it into your billing system
+   - File naming: QC_Time_Tracker_YYYYMMDD.csv
+
+4. OFFLINE USAGE:
+   - The app works offline after first installation
+   - Data is stored locally on your phone
+   - Export CSV when you have internet to transfer data
+
+
+DATA STORAGE:
+-------------
+- All data is stored locally on your Android phone
+- Data persists even if you close the app
+- Export to CSV regularly to backup your data
+- If you clear browser data/cache, you will lose entries
+
+
+FEATURES:
+---------
+✓ No internet required after installation
+✓ Works completely offline
+✓ Automatic time rounding (up to next 0.1 hour)
+✓ Task description with word count limit
+✓ View all time entries
+✓ Export to CSV format
+✓ Mobile-optimized interface
+✓ Visual feedback (green when timing, black when stopped)
+✓ Displays total hours and entry count
+
+
+TROUBLESHOOTING:
+----------------
+1. "Can't install app" message:
+   - Make sure you're using Chrome, Edge, or Samsung Internet
+   - Try accessing via HTTPS instead of HTTP (requires hosting)
+
+2. App not showing "Install" option:
+   - Refresh the page
+   - Make sure manifest.json and service-worker.js are in the same folder
+
+3. Can't access from phone:
+   - Verify laptop and phone are on same Wi-Fi network
+   - Check Windows Firewall isn't blocking the port
+   - Try: python -m http.server 8080 --bind 0.0.0.0
+
+4. Data disappeared:
+   - Don't clear browser data for the app
+   - Export to CSV regularly as backup
+
+5. CSV not downloading:
+   - Check Downloads folder on your phone
+   - Verify storage permissions for the browser
+
+
+UNINSTALLING:
+-------------
+To remove the app from your Android phone:
+1. Long-press the app icon
+2. Select "App info" or drag to "Uninstall"
+3. Confirm uninstall
+
+Note: This will also delete all stored time entries!
+
+
+NEED HELP?
+----------
+- Make sure all files are in the same folder
+- Check that file names match exactly (case-sensitive)
+- Ensure your laptop's firewall allows incoming connections on port 8080 (or 3000)
+

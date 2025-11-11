@@ -1,0 +1,64 @@
+DEPLOY QC TIME TRACKER TO GITHUB PAGES
+=======================================
+
+This is the EASIEST way to get your app online permanently for FREE!
+You'll get a permanent URL that works on any device.
+
+STEP 1: Create a GitHub Account (if you don't have one)
+--------------------------------------------------------
+1. Go to: https://github.com
+2. Click "Sign up"
+3. Create a free account
+
+STEP 2: Create a New Repository
+--------------------------------
+1. Log into GitHub
+2. Click the "+" icon (top right) → "New repository"
+3. Repository name: qc-time-tracker
+4. Make it PUBLIC (required for free GitHub Pages)
+5. Click "Create repository"
+
+STEP 3: Upload Your Files
+--------------------------
+1. On your new repository page, click "uploading an existing file"
+2. Drag and drop these files:
+   ✓ time_tracker_pwa.html
+   ✓ manifest.json
+   ✓ service-worker.js
+   ✓ QC_Logo_Letterhead_241111.jpg
+   ✓ QC_Letters_250212.ico
+
+3. Add a commit message: "Initial commit"
+4. Click "Commit changes"
+
+STEP 4: Enable GitHub Pages
+----------------------------
+1. In your repository, click "Settings" (top menu)
+2. Scroll down and click "Pages" (left sidebar)
+3. Under "Source", select "main" branch
+4. Click "Save"
+5. Wait 1-2 minutes for deployment
+
+STEP 5: Get Your URL
+--------------------
+Your app will be available at:
+https://YOUR-USERNAME.github.io/qc-time-tracker/time_tracker_pwa.html
+
+Replace YOUR-USERNAME with your actual GitHub username.
+
+STEP 6: Install on Android
+---------------------------
+1. Open Chrome on your Android phone
+2. Go to your GitHub Pages URL
+3. Tap menu (⋮) → "Install app"
+4. Done! The app is now on your phone!
+
+BENEFITS:
+---------
+✓ Works from anywhere (home, office, travel)
+✓ Completely free
+✓ Permanent URL
+✓ HTTPS (required for PWA)
+✓ No server maintenance
+✓ Can update anytime by uploading new files
+
