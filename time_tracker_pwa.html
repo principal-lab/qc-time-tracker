@@ -144,6 +144,11 @@
             color: white;
         }
 
+        #clearDataBtn {
+            background-color: #9E9E9E;
+            color: white;
+        }
+
         .status {
             text-align: center;
             padding: 12px;
@@ -332,6 +337,10 @@
         <div class="button-group">
             <button id="viewDataBtn" onclick="showData()">View Data</button>
             <button id="exportBtn" onclick="exportToCSV()">Export CSV</button>
+        </div>
+
+        <div class="button-group">
+            <button id="clearDataBtn" onclick="clearAllData()">Clear All Data</button>
         </div>
 
         <div class="status idle" id="status">Ready to start timing</div>
@@ -597,6 +606,25 @@
 
             showStatus(`Exported ${entries.length} entries to ${filename}`, 'success');
             setTimeout(() => showStatus('Ready to start timing', 'idle'), 3000);
+        }
+
+        function clearAllData() {
+            const entries = getStoredData();
+
+            if (entries.length === 0) {
+                showStatus('No data to clear', 'error');
+                setTimeout(() => showStatus('Ready to start timing', 'idle'), 2000);
+                return;
+            }
+
+            const confirmMessage = `Are you sure you want to delete all ${entries.length} time entries? This cannot be undone.`;
+
+            if (confirm(confirmMessage)) {
+                localStorage.removeItem('qc_time_entries');
+                updateDataSummary();
+                showStatus('All data has been cleared', 'success');
+                setTimeout(() => showStatus('Ready to start timing', 'idle'), 3000);
+            }
         }
     </script>
 </body>
