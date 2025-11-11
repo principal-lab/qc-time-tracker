@@ -1,4 +1,4 @@
-const CACHE_NAME = 'qc-time-tracker-v1';
+const CACHE_NAME = 'qc-time-tracker-v2';
 const urlsToCache = [
   './time_tracker_pwa.html',
   './QC_Logo_Letterhead_241111.jpg',
